@@ -18,6 +18,10 @@ io.on("connection", (socket) => {
   socket.on("chat message", (msg) => {
     io.emit("chat message", msg);
   });
+
+  socket.on("user name change", (msg) => {
+    io.emit("user name change", msg);
+  });
 });
 
 http.listen(3000, () => {
