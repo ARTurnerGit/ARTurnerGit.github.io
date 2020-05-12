@@ -8,9 +8,11 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("user connected");
+  io.emit("chat message", "somebody joined the chat room!");
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
+    io.emit("chat message", "somebody left the chat room :(");
   });
 
   socket.on("chat message", (msg) => {
