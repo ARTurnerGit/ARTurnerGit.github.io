@@ -8,19 +8,25 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("user connected");
-  io.emit("chat message", "somebody joined the chat room!");
+  io.emit("chat message", {
+    alias: "a new user",
+    msg: "Hello, I've joined the chat room",
+  });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
-    io.emit("chat message", "somebody left the chat room :(");
+    io.emit("chat message", {
+      alias: "a current user",
+      msg: "Toodlepip, I'm off",
+    });
   });
 
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
+  socket.on("chat message", (msgObj) => {
+    io.emit("chat message", msgObj);
   });
 
-  socket.on("user name change", (msg) => {
-    io.emit("user name change", msg);
+  socket.on("user name change", (newName) => {
+    io.emit("user name change", newName);
   });
 });
 

@@ -56,7 +56,7 @@
     <ul id="messages"></ul>
     <form action="">
       <button id="alias-button">Set Alias</button>
-      <input id="alias" autocomplete="off" />
+      <input id="alias" autocomplete="off" placeholder="undefined" />
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
@@ -67,8 +67,10 @@
 
         $("form").submit(function (e) {
           e.preventDefault();
-          socket.emit("chat message", $("#m").val());
-          $("#m").val("");
+          socket.emit("chat message", {
+            alias: $("#alias").val(),
+            msg: $("#m").val(),
+          });
           return false;
         });
 
@@ -78,13 +80,13 @@
           return false;
         });
 
-        socket.on("chat message", function (msg) {
-          $("#messages").append($("<li>").text(msg));
+        socket.on("chat message", function ({ alias, msg }) {
+          $("#messages").append($("<li>").text(`${alias} says: ${msg}`));
         });
 
-        socket.on("user name change", function (msg) {
+        socket.on("user name change", function (newName) {
           $("#messages").append(
-            $("<li>").text(`someone changed their name to "${msg}"`)
+            $("<li>").text(`someone changed their name to "${newName}"`)
           );
         });
       });
