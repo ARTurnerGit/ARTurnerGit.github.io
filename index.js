@@ -10,7 +10,6 @@ let usersOnline = 0;
 
 io.on("connection", (socket) => {
   usersOnline++;
-  console.log("user connected");
 
   io.emit("chat message", {
     alias: "a new user",
