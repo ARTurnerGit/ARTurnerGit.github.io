@@ -6,18 +6,23 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+let usersOnline = 0;
+
 io.on("connection", (socket) => {
+  usersOnline++;
   console.log("user connected");
+
   io.emit("chat message", {
     alias: "a new user",
-    msg: "Hello, I've joined the chat room",
+    msg: `Hello, I've joined the chat room, there are now ${usersOnline} users online`,
   });
 
   socket.on("disconnect", () => {
+    usersOnline--;
     console.log("user disconnected");
     io.emit("chat message", {
       alias: "a current user",
-      msg: "Toodlepip, I'm off",
+      msg: `Toodlepip, I'm off - now ${usersOnline} users online`,
     });
   });
 
