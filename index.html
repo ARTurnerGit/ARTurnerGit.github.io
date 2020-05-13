@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
     <title>Socket.IO chat</title>
-    <style>
+    <!-- <style>
       * {
         margin: 0;
         padding: 0;
@@ -49,47 +55,92 @@
       #messages li:nth-child(odd) {
         background: #eee;
       }
-    </style>
+    </style> -->
   </head>
 
   <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <button id="alias-button">Set Alias</button>
-      <input id="alias" autocomplete="off" placeholder="undefined" />
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-      $(function () {
-        var socket = io();
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 input-group mb-3">
+          <input
+            id="alias"
+            type="text"
+            class="form-control"
+            placeholder="Enter your username"
+            aria-label="username input box"
+            aria-describedby="button-addon2"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="button-addon2"
+            >
+              Change Username
+            </button>
+          </div>
+        </div>
 
-        $("form").submit(function (e) {
-          e.preventDefault();
-          socket.emit("chat message", {
-            alias: $("#alias").val(),
-            msg: $("#m").val(),
-          });
-          return false;
-        });
+        <div class="col-sm-6 input-group mb-3">
+          <input
+            id="avatar-url"
+            type="text"
+            class="form-control"
+            placeholder="Enter your Avatar URL"
+            aria-label="Avatar url input box"
+            aria-describedby="button-addon2"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="button-addon2"
+            >
+              Change Avatar URL
+            </button>
+          </div>
+        </div>
+      </div>
 
-        $("#alias-button").click(function (e) {
-          e.preventDefault();
-          socket.emit("user name change", $("#alias").val());
-          return false;
-        });
-
-        socket.on("chat message", function ({ alias, msg }) {
-          $("#messages").append($("<li>").text(`${alias} says: ${msg}`));
-        });
-
-        socket.on("user name change", function (newName) {
-          $("#messages").append(
-            $("<li>").text(`someone changed their name to "${newName}"`)
-          );
-        });
-      });
-    </script>
+      <ul id="messages"></ul>
+      <form action="">
+        <button id="alias-button">Set Alias</button>
+        <input id="alias" autocomplete="off" placeholder="undefined" />
+        <input id="m" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
   </body>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script>
+    $(function () {
+      var socket = io();
+
+      $("form").submit(function (e) {
+        e.preventDefault();
+        socket.emit("chat message", {
+          alias: $("#alias").val(),
+          msg: $("#m").val(),
+        });
+        return false;
+      });
+
+      $("#alias-button").click(function (e) {
+        e.preventDefault();
+        socket.emit("user name change", $("#alias").val());
+        return false;
+      });
+
+      socket.on("chat message", function ({ alias, msg }) {
+        $("#messages").append($("<li>").text(`${alias} says: ${msg}`));
+      });
+
+      socket.on("user name change", function (newName) {
+        $("#messages").append(
+          $("<li>").text(`someone changed their name to "${newName}"`)
+        );
+      });
+    });
+  </script>
 </html>
